@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "539030249597",
+    "project_id": "stocker-l-horaire-des-employes",
+    "storage_bucket": "stocker-l-horaire-des-employes.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539030249597:android:ed2eb5d6fa893152949114",
+        "android_client_info": {
+          "package_name": "com.example.application_de_gestion_des_resources"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3hTv_BEEACcpVW0qAqEsmql07184_slM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
