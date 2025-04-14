@@ -1,6 +1,7 @@
 import 'package:application_de_gestion_des_resources/formulaire_ajout_d_employe.dart';
 import 'package:application_de_gestion_des_resources/models/employe.dart';
 import 'package:application_de_gestion_des_resources/profil_employee.dart';
+import 'package:application_de_gestion_des_resources/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,11 @@ class HomePage extends StatelessWidget {
             fontSize: 24,
           ),
         ),
+        actions: [Container(
+          decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+          child: IconButton(onPressed: () {
+            Get.to(Profile());
+          }, icon: Icon(Icons.person)))],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("Employes").snapshots(),
@@ -40,21 +46,22 @@ class HomePage extends StatelessWidget {
             itemCount: employes.length,
             itemBuilder: (context, index) {
               Employe employe = employes[index];
-              return GestureDetector(onTap: (){
-                Navigator.push(context, 
-                MaterialPageRoute(builder:(context) => ProfilEmployee(employe:employes[index]),
-                
-                ),
-                );
-              },
-              
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ProfilEmployee(employe: employes[index]),
+                    ),
+                  );
+                },
                 child: Container(
                   padding: EdgeInsets.all(9),
                   margin: EdgeInsets.all(9),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black26),
-                    borderRadius: BorderRadius.circular(12)
-                  ),
+                      border: Border.all(color: Colors.black26),
+                      borderRadius: BorderRadius.circular(12)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -75,8 +82,9 @@ class HomePage extends StatelessWidget {
                         ),
                         maxLines: 1,
                       ),
-                
-                      Text(employe.role, style: TextStyle(color: const Color.fromARGB(255, 255, 145, 0))),
+                      Text(employe.role,
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 255, 145, 0))),
                       Row(
                         children: [
                           Icon(CupertinoIcons.clock),
