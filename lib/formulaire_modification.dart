@@ -30,7 +30,12 @@ class FormulaireModificationDEmploye extends StatelessWidget {
   TextEditingController departController =TextEditingController(text: employe.depart);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ajouter un employé"),
+        backgroundColor: Colors.orange,
+        title: Text("Modifier un employé",style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),),
       ),
       body: SingleChildScrollView(
 

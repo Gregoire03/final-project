@@ -1,8 +1,11 @@
 import 'package:application_de_gestion_des_resources/formulaire_ajout_d_employe.dart';
+import 'package:application_de_gestion_des_resources/main.dart';
 import 'package:application_de_gestion_des_resources/models/employe.dart';
 import 'package:application_de_gestion_des_resources/profil_employee.dart';
 import 'package:application_de_gestion_des_resources/profile.dart';
+import 'package:application_de_gestion_des_resources/profile_page.dart'; // Ensure this is the correct path
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +15,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      FirebaseAuth.instance.currentUser != null
+      ? email = FirebaseAuth.instance.currentUser!.email!
+      : null;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
@@ -26,7 +32,9 @@ class HomePage extends StatelessWidget {
         actions: [Container(
           decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
           child: IconButton(onPressed: () {
-            Get.to(Profile());
+            Get.to(
+              Profile()
+          );
           }, icon: Icon(Icons.person)))],
       ),
       body: StreamBuilder(
@@ -52,7 +60,7 @@ class HomePage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          ProfilEmployee(employe: employes[index]),
+                          ProfilEmployee(employe: employes[index],),
                     ),
                   );
                 },

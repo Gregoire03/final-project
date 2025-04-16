@@ -1,0 +1,189 @@
+import 'package:application_de_gestion_des_resources/models/stock.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
+class FormulaireAjoutDeStock extends StatefulWidget {
+  const FormulaireAjoutDeStock({super.key});
+
+  @override
+  _FormulaireAjoutDeStockState createState() => _FormulaireAjoutDeStockState();
+}
+
+class _FormulaireAjoutDeStockState extends State<FormulaireAjoutDeStock> {
+  final TextEditingController _nomController = TextEditingController();
+  final TextEditingController _categorieController = TextEditingController();
+  final TextEditingController _quantiteController = TextEditingController();
+  final TextEditingController _prixunitairController = TextEditingController();
+  final TextEditingController _referenceController = TextEditingController();
+  final TextEditingController _imageController = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    // Libération des contrôleurs pour éviter les fuites de mémoire
+    _nomController.dispose();
+    _categorieController.dispose();
+    _quantiteController.dispose();
+    _prixunitairController.dispose();
+    _referenceController.dispose();
+    _imageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Ajouter un produit'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Center(
+                child: InkWell(
+                  onTap: () {
+                    // Ajoutez ici la logique pour sélectionner une image
+                    print('Sélectionner une image');
+                  },
+                  child: Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.camera_alt, color: Colors.grey, size: 40),
+                          Text('Ajouter une image', style: TextStyle(color: Colors.grey)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Nom du produit
+              TextFormField(
+                controller: _nomController,
+                decoration: const InputDecoration(
+                  labelText: 'Nom du produit',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Veuillez entrer le nom du produit';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              // Catégorie
+              TextFormField(
+                controller: _categorieController,
+                decoration: const InputDecoration(
+                  labelText: 'Catégorie',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Veuillez entrer la catégorie';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              // Quantité
+              TextFormField(
+                controller: _quantiteController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Quantité',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Veuillez entrer la quantité';
+                  }
+                  if (int.tryParse(value) == null) {
+                    return 'Veuillez entrer un nombre valide';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              // Prix unitaire
+              TextFormField(
+                controller: _prixunitairController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                decoration: const InputDecoration(
+                  labelText: 'Prix unitaire',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Veuillez entrer le prix unitaire';
+                  }
+                  if (double.tryParse(value) == null) {
+                    return 'Veuillez entrer un nombre valide';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              // Référence
+              TextFormField(
+                controller: _referenceController,
+                decoration: const InputDecoration(
+                  labelText: "Référence (Optionnel)",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 32),
+              // Bouton Ajouter
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      // Récupération des données
+                      final nom = _nomController.text;
+                      final categorie = _categorieController.text;
+                      final image = _imageController.text;
+                      final quantite = int.parse(_quantiteController.text);
+                      final prixunitair = double.parse(_prixunitairController.text);
+                      final reference = _referenceController.text;
+
+                      // Création de l'objet Stock
+                      final stock = Stock(
+                        nom: nom,
+                        categorie: categorie,
+                        quantite: quantite.toString(),
+                        prixunitair: prixunitair.toString(),
+                        image: image,
+                        reference: reference,
+                      );
+
+                      // Enregistrement dans Firestore
+                      FirebaseFirestore.instance.collection("Stock").doc(nom).set(stock.toMap());
+
+                      // Retour à l'écran précédent
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text("Ajouter le produit"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

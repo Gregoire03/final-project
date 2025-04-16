@@ -12,8 +12,12 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Profil"),
+      appBar: AppBar(backgroundColor: Colors.orange,
+        title: Text("Profil",style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),),
       ),
       body: FutureBuilder(
         future: FirebaseFirestore.instance
@@ -34,6 +38,7 @@ class Profile extends StatelessWidget {
               width: Get.width,
               child: Column(
                 children: [
+                  SizedBox(height: 50,),
                   Container(
                     height: 90,
                     width: 90,
@@ -41,8 +46,13 @@ class Profile extends StatelessWidget {
                         color: Colors.blue, shape: BoxShape.circle),
                     child: Icon(Icons.person),
                   ),
+                  SizedBox(height: 20,),
                   Text(
-                    utilisateur.nom + " " + utilisateur.prenom,
+                    utilisateur.nom + " " + utilisateur.prenom,  style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
                   )
                 ],
               ),
@@ -56,22 +66,46 @@ class Profile extends StatelessWidget {
             child: ElevatedButton(onPressed: () {
               Get.dialog(Dialog(child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("Deconnexion", style: TextStyle(fontSize: 28),),
-                    Text("Voulez-vous vraiment vous deconnecter ?"),
-                    TextButton(onPressed: (){
-                      Get.back();
-                    }, child: Text("Non")),
-                    TextButton(onPressed: (){
-                      Get.off(InterfaceDeConnexion());
-                    }, child: Text("Oui")),
-                  ],
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                  
+                      Text("Deconnexion", style: TextStyle(fontSize: 50),),
+                      SizedBox(height: 10,),
+                      Text("Voulez-vous vraiment vous deconnecter ?",style: TextStyle(fontSize: 15),),
+                      SizedBox(height: 20,),
+                      TextButton(onPressed: (){
+                        Get.back();
+                      }, child: Text("Non")),
+                      TextButton(onPressed: (){
+                        Get.off(InterfaceDeConnexion());
+                      }, child: Text("Oui")),
+                    ],
+                  ),
                 ),
               ),));
-            }, child: Text('Deconnexion')),
+
+            }, 
+              
+              child: Text('Deconnexion',style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 24, 
+            
+
           ),
-    );
+          ),
+          
+          
+            )
+            
+            ),
+            
+          );
+          
+          
+    
   }
+  
 }

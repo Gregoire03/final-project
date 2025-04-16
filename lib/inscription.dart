@@ -16,7 +16,12 @@ class Inscription extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Inscription"),
+        backgroundColor: Colors.orange,
+        title: Text("Inscription",style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ), ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -26,28 +31,35 @@ class Inscription extends StatelessWidget {
               controller: nomController,
               decoration: InputDecoration(
                 label: Text("Entrez votre nom"),
+                border: OutlineInputBorder()
               ),
             ),
+            SizedBox(height: 25,),
             TextFormField(
               controller: prenomController,
               decoration: InputDecoration(
                 label: Text("Entrez votre Prenom"),
+                border:OutlineInputBorder()
               ),
             ),
+            SizedBox(height: 25,),
             TextFormField(
               controller: emailController,
               decoration: InputDecoration(
                 label: Text("Entrez votre email"),
+                border: OutlineInputBorder()
               ),
             ),
+            SizedBox(height: 25,),
             TextFormField(
               controller: mdpController,
               decoration: InputDecoration(
                 label: Text("Entrez un mot de passe"),
+                border: OutlineInputBorder()
               ),
             ),
             SizedBox(
-              height: 24,
+              height: 30,
             ),
             ElevatedButton(
                 onPressed: () async {
@@ -61,7 +73,7 @@ class Inscription extends StatelessWidget {
                         email: email, password: mdp);
 
                     var utilisateur = Utilisateur(
-                        nom: nom, prenom: prenom, email: email, mdp: mdp);
+                        nom: nom, prenom: prenom, email: email, mdp: mdp, );
                     await FirebaseFirestore.instance
                         .collection('Utilisateurs')
                         .doc(email)

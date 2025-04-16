@@ -1,243 +1,198 @@
-// import 'package:flutter/material.dart';
-
-// class TableauDeBord extends StatelessWidget {
-//   const TableauDeBord({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.cyanAccent,
-//         title: Text("Page d'Acceuil"),
-//       ),
-//     body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Icon(Icons.manage_accounts_rounded),
-//             ElevatedButton(
-//               onPressed: () {},
-//               child:
-//                Text("Gérer les employés"),
-               
-//             ),
-//             SizedBox(height: 40),
-//             ElevatedButton(
-//               onPressed: () {},
-//               child: Text("Gérer l'inventaire"),
-//             ),
-//           ],
-//         ),
-
-
-
-        
-//       ),
-//       bottomNavigationBar: Container(
-      
-        
-//         color: Colors.white12,
-//         child:
-        
-//          Row(
-          
-          
-//           children: [
-            
-            
-//             Icon(Icons.dashboard),
-//             Icon(Icons.reduce_capacity_outlined),
-//             Icon(Icons.more_vert),
-            
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
-
-
-
-
-
+import 'package:application_de_gestion_des_resources/home_page.dart';
+import 'package:application_de_gestion_des_resources/home_page_stock.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-void main() {
-  runApp(const GestEmpApp());
-}
-
-class GestEmpApp extends StatelessWidget {
-  const GestEmpApp({Key? key}) : super(key: key);
+class TableauDeBord extends StatelessWidget {
+  const TableauDeBord({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'GestEmp',
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const EmployesScreen(),
-    );
-  }
-}
-
-class EmployesScreen extends StatelessWidget {
-  const EmployesScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // Liste des employés (dans un cas réel, cela viendrait probablement d'une API)
-    final employes = List.generate(
-      4,
-      (index) => {
-        'nom': 'Armelia Gone',
-        'poste': 'Maçon principale',
-        'horaires': '12h - 17h',
-        'image': 'assets/employe_${index + 1}.jpg', // Vous devrez ajouter ces images à votre projet
-      },
-    );
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
-        title: const Text(
-          'GestEmp',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
+        title: const Text("Tableau de Bord"),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // En-tête Employés
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Bienvenue, KAO Julienne',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            Row(
               children: [
-                Icon(Icons.people, color: Colors.black, size: 28),
-                const SizedBox(width: 8),
-                Text(
-                  'Employés',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          
-          // Grille d'employés
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16.0),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
-                childAspectRatio: 0.85,
-              ),
-              itemCount: employes.length,
-              itemBuilder: (context, index) {
-                final employe = employes[index];
-                return EmployeCard(
-                  nom: employe['nom']!,
-                  poste: employe['poste']!,
-                  horaires: employe['horaires']!,
-                  imageUrl: employe['image']!,
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class EmployeCard extends StatelessWidget {
-  final String nom;
-  final String poste;
-  final String horaires;
-  final String imageUrl;
-
-  const EmployeCard({
-    Key? key,
-    required this.nom,
-    required this.poste,
-    required this.horaires,
-    required this.imageUrl,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image de l'employé
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.asset(
-              imageUrl,
-              height: 120,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Nom de l'employé
-                Text(
-                  nom,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                // Poste de l'employé
-                Text(
-                  poste,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.orange,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                // Horaires de l'employé
-                Row(
-                  children: [
-                    const Icon(Icons.access_time, size: 16, color: Colors.grey),
-                    const SizedBox(width: 4),
-                    Text(
-                      horaires,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
+                Expanded(
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Get.to(() => const HomePage());
+                            },
+                            child: const Text(
+                              "Employés",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('Employes')
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+                              if (!snapshot.hasData ||
+                                  snapshot.data!.docs.isEmpty) {
+                                return const Text(
+                                  '0',
+                                  style: TextStyle(fontSize: 24),
+                                );
+                              }
+                              final int nombreEmployes =
+                                  snapshot.data!.docs.length;
+                              return Text(
+                                '$nombreEmployes',
+                                style: const TextStyle(fontSize: 24),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Get.to(() => const HomePageStock());
+                            },
+                            child: const Text(
+                              "Stocks",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            '48', // Remplacez par le nombre réel si nécessaire
+                            style: TextStyle(fontSize: 24),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
+            const SizedBox(height: 16),
+            // Card(
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(16.0),
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         const Text(
+            //           'Employés qui travaillent aujourd\'hui',
+            //           style:
+            //               TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            //         ),
+            //         const SizedBox(height: 8),
+            //         StreamBuilder<QuerySnapshot>(
+            //           stream: FirebaseFirestore.instance
+            //               .collection("Employes")
+            //               .where("travail", isEqualTo: true) // Filtrer ceux qui travaillent
+            //               .snapshots(),
+            //           builder: (context, snapshot) {
+            //             if (snapshot.connectionState ==
+            //                 ConnectionState.waiting) {
+            //               return const Center(
+            //                   child: CircularProgressIndicator());
+            //             }
+            //             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            //               return const Text("Aucun employé ne travaille aujourd'hui");
+            //             }
+
+            //             // Liste des employés qui travaillent
+            //             return Column(
+            //               children: snapshot.data!.docs.map((doc) {
+            //                 final data = doc.data() as Map<String, dynamic>;
+            //                 return ListTile(
+            //                   leading: const Icon(Icons.work, color: Colors.green),
+            //                   title: Text(data['nom']),
+            //                   subtitle: Text(data['role']),
+            //                 );
+            //               }).toList(),
+            //             );
+            //           },
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(height: 16),
+            // Card(
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(16.0),
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         const Text(
+            //           'Employés en congé',
+            //           style:
+            //               TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            //         ),
+            //         const SizedBox(height: 8),
+            //         StreamBuilder<QuerySnapshot>(
+            //           stream: FirebaseFirestore.instance
+            //               .collection("Employes")
+            //               .where("travail", isEqualTo: false) // Filtrer ceux en congé
+            //               .snapshots(),
+            //           builder: (context, snapshot) {
+            //             if (snapshot.connectionState ==
+            //                 ConnectionState.waiting) {
+            //               return const Center(
+            //                   child: CircularProgressIndicator());
+            //             }
+            //             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            //               return const Text("Aucun employé en congé");
+            //             }
+
+            //             // Liste des employés en congé
+            //             return Column(
+            //               children: snapshot.data!.docs.map((doc) {
+            //                 final data = doc.data() as Map<String, dynamic>;
+            //                 return ListTile(
+            //                   leading: const Icon(Icons.beach_access, color: Colors.blue),
+            //                   title: Text(data['nom']),
+            //                   subtitle: Text(data['role']),
+            //                 );
+            //               }).toList(),
+            //             );
+            //           },
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }
